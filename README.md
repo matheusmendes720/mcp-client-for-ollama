@@ -56,6 +56,7 @@
 - [Related Projects](#related-projects)
 - [License](#license)
 - [Acknowledgments](#acknowledgments)
+- [📚 More Documentation](#-more-documentation)
 
 ## Overview
 
@@ -956,6 +957,19 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - [Prompt Toolkit](https://python-prompt-toolkit.readthedocs.io/) for the interactive command line interface
 - [UV](https://www.uvicorn.org/) for the lightning-fast Python package manager and virtual environment management
 - [Asciinema](https://asciinema.org/) for the demo recording
+
+---
+
+## 📚 More Documentation
+
+| Document | What it covers |
+|----------|---------------|
+| [ARCHITECTURE.md](ARCHITECTURE.md) | Module map, data flow, class responsibilities |
+| [CONTRIBUTING.md](CONTRIBUTING.md) | Dev setup, testing, coding standards, release process |
+| [TROUBLESHOOTING.md](TROUBLESHOOTING.md) | Common errors and fixes |
+| [CHANGELOG.md](CHANGELOG.md) | Version history |
+| [DEV.md](DEV.md) | Version bumping, GitHub Actions publishing |
+| [docs/INDEX.md](docs/INDEX.md) | All docs with decision tree |
 
 ---
 
