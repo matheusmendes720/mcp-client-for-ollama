@@ -3,9 +3,9 @@ Input utilities for the MCP client for Ollama.
 
 This module provides functions for getting user input without autocomplete.
 """
+
 import sys
-import tty
-import termios
+
 from prompt_toolkit import PromptSession
 from prompt_toolkit.styles import Style
 from .constants import DEFAULT_COMPLETION_STYLE
@@ -13,14 +13,24 @@ from .constants import DEFAULT_COMPLETION_STYLE
 
 def read_single_keypress() -> str:
     """Read a single keypress without requiring Enter."""
-    fd = sys.stdin.fileno()
-    old_settings = termios.tcgetattr(fd)
-    try:
-        tty.setraw(fd)
-        ch = sys.stdin.read(1)
-    finally:
-        termios.tcsetattr(fd, termios.TCSADRAIN, old_settings)
-    return ch
+    if sys.platform != "win32":
+        # Unix: use termios/tty for raw input
+        import termios
+        import tty
+
+        fd = sys.stdin.fileno()
+        old_settings = termios.tcgetattr(fd)
+        try:
+            tty.setraw(fd)
+            ch = sys.stdin.read(1)
+        finally:
+            termios.tcsetattr(fd, termios.TCSADRAIN, old_settings)
+        return ch
+    else:
+        # Windows: use msvcrt
+        import msvcrt
+
+        return msvcrt.getch().decode("utf-8", errors="replace")
 
 
 async def get_input_no_autocomplete(prompt_text: str) -> str:
@@ -37,12 +47,8 @@ async def get_input_no_autocomplete(prompt_text: str) -> str:
     """
     try:
         # Create a temporary session without completer
-        temp_session = PromptSession(
-            style=Style.from_dict(DEFAULT_COMPLETION_STYLE)
-        )
-        user_input = await temp_session.prompt_async(
-            f"{prompt_text}❯ "
-        )
+        temp_session = PromptSession(style=Style.from_dict(DEFAULT_COMPLETION_STYLE))
+        user_input = await temp_session.prompt_async(f"{prompt_text}❯ ")
         return user_input
     except KeyboardInterrupt:
         return "quit"
